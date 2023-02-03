@@ -171,6 +171,13 @@
       ]
     },
     {
+      "name": "add-to-playlist",
+      "title": "Add to playlist",
+      "subtitle": "Apple Music",
+      "description": "Add currently playing track to a playlist",
+      "mode": "view"
+    },
+    {
       "name": "set-volume",
       "title": "Set Volume",
       "subtitle": "Apple Music",
