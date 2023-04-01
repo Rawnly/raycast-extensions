@@ -1,12 +1,8 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default async () => {
-  await pipe(
-    music.currentTrack.love,
-    handleTaskEitherError(SFSymbols.WARNING + " Failed to love the track", SFSymbols.LOVE + " Loved")
-  )();
-};
+export default handleResult(scripts.currentTrack.love, {
+  onSuccess: "Track Loved",
+  onError: "Failed to love track",
+});

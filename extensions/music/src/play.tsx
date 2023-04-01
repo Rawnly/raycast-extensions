@@ -1,10 +1,5 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default pipe(
-  music.player.play,
-  handleTaskEitherError(SFSymbols.WARNING + " Failed to start playback", SFSymbols.PLAY_FILL + " Playback started")
-)();
+export default handleResult(scripts.player.play);

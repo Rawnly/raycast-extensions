@@ -22,6 +22,30 @@
   },
   "preferences": [
     {
+      "type": "checkbox",
+      "name": "enhancedFeedback",
+      "default": true,
+      "description": "Display toast messages / HUD notifications when actions are completed",
+      "label": "Enhanced Feedback",
+      "required": false
+    },
+    {
+      "type": "checkbox",
+      "name": "closeMainWindowOnControls",
+      "default": true,
+      "description": "Close Raycast when using the play/pause, next track, previous track, volume up, and volume down etc...",
+      "label": "Close Raycast window on controls",
+      "required": false
+    },
+    {
+      "type": "checkbox",
+      "name": "sendAnonymousUsageData",
+      "default": true,
+      "description": "Send anonymous usage data to help improve Raycast Music.",
+      "label": "Send anonymous usage data.",
+      "required": false
+    },
+    {
       "type": "dropdown",
       "name": "volumeSteps",
       "title": "Volume Steps",
@@ -53,15 +77,15 @@
       "mode": "no-view"
     },
     {
-      "name": "reveal-track",
+      "name": "reveal",
       "title": "Reveal Track",
       "subtitle": "Apple Music",
       "description": "Reveal current track inside the Music app",
       "mode": "no-view"
     },
     {
-      "name": "toggle-play-pause",
-      "title": "Toggle Play/Pause",
+      "name": "playpause",
+      "title": "Play/Pause",
       "subtitle": "Apple Music",
       "description": "Toggle play or pause of current track in Music.",
       "mode": "no-view"
@@ -95,13 +119,6 @@
       "mode": "no-view"
     },
     {
-      "name": "currently-playing",
-      "title": "Currently Playing Track",
-      "subtitle": "Apple Music",
-      "description": "Get info about currently playing track.",
-      "mode": "no-view"
-    },
-    {
       "name": "love",
       "title": "Love Track",
       "subtitle": "Apple Music",
@@ -114,90 +131,6 @@
       "subtitle": "Apple Music",
       "description": "Dislike currently playing track.",
       "mode": "no-view"
-    },
-    {
-      "name": "add-to-library",
-      "title": "Add to Library",
-      "subtitle": "Apple Music",
-      "description": "Add currently playing track to your library.",
-      "mode": "no-view"
-    },
-    {
-      "name": "love-and-add-to-library",
-      "title": "Love and Add to Library",
-      "subtitle": "Apple Music",
-      "description": "Love and add currently playing track to your library.",
-      "mode": "no-view"
-    },
-    {
-      "name": "add-to-playlist",
-      "title": "Add to Playlist",
-      "subtitle": "Apple Music",
-      "description": "Add currently playing track to a playlist",
-      "keywords": [
-        "playlist"
-      ],
-      "mode": "view"
-    },
-    {
-      "name": "start-playlist",
-      "title": "Start Playlist",
-      "subtitle": "Apple Music",
-      "description": "Start any of your playlists.",
-      "keywords": [
-        "playlist"
-      ],
-      "mode": "view"
-    },
-    {
-      "name": "play-library-track",
-      "title": "Play Library Track",
-      "subtitle": "Apple Music",
-      "description": "Search and start a track from your library.",
-      "keywords": [
-        "track"
-      ],
-      "mode": "view"
-    },
-    {
-      "name": "play-library-album",
-      "title": "Play Library Album",
-      "subtitle": "Apple Music",
-      "description": "Search and start an album from your library.",
-      "keywords": [
-        "album"
-      ],
-      "mode": "view"
-    },
-    {
-      "name": "set-rating",
-      "title": "Rate Track",
-      "subtitle": "Apple Music",
-      "description": "Rate currently playing track.",
-      "mode": "view",
-      "keywords": [
-        "track",
-        "rating"
-      ]
-    },
-    {
-      "name": "set-volume",
-      "title": "Set Volume",
-      "subtitle": "Apple Music",
-      "description": "Set Music volume",
-      "mode": "view",
-      "keywords": [
-        "volume",
-        "sound"
-      ],
-      "arguments": [
-        {
-          "name": "volumeArg",
-          "placeholder": "Volume (0-100)",
-          "type": "text",
-          "required": false
-        }
-      ]
     },
     {
       "name": "volume-up",
@@ -225,20 +158,23 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.47.2",
-    "fp-ts": "^2.12.1",
-    "io-ts": "^2.2.19",
-    "run-applescript": "^6.0.0"
+    "@raycast/api": "^1.49.1",
+    "fp-ts": "^2.13.1",
+    "io-ts": "^2.2.20",
+    "run-applescript": "^6.1.0",
+    "ts-pattern": "^4.2.2",
+    "undici": "^5.21.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@rawnly/eslint-config-ts": "^0.0.2",
-    "@types/node": "~16.10.0",
-    "@types/react": "^17.0.28",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.14.0",
-    "eslint-config-prettier": "^8.3.0",
-    "react-devtools": "^4.19.2",
-    "typescript": "^4.4.3"
+    "@types/node": "~18.15.11",
+    "@types/react": "^18.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
+    "react-devtools": "^4.27.4",
+    "typescript": "^5.0.3"
   }
 }

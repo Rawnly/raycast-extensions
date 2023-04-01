@@ -2,4 +2,4 @@ import { scripts } from "@/lib/apple-music";
 
 import { handleResult } from "./lib/utils";
 
-export default handleResult(scripts.player.volume.increase);
+export default handleResult(scripts.currentTrack.reveal);

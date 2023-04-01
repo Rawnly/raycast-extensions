@@ -1,10 +1,8 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default pipe(
-  music.player.next,
-  handleTaskEitherError(SFSymbols.WARNING + " Failed to skip track", SFSymbols.TRACK_NEXT + " Track skipped")
-)();
+export default handleResult(scripts.player.next, {
+  onSuccess: "Next Track",
+  onError: "Failed to go to next track",
+});

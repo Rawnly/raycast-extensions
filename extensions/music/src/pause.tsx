@@ -1,10 +1,8 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default pipe(
-  music.player.pause,
-  handleTaskEitherError(SFSymbols.WARNING + " Failed to pause playback", SFSymbols.PAUSE + " Playback paused")
-)();
+export default handleResult(scripts.player.playPause, {
+  onSuccess: "Play/Pause",
+  onError: "Failed to play/pause",
+});

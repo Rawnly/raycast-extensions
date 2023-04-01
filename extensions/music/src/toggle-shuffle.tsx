@@ -1,15 +1,5 @@
-import { showToast, Toast } from "@raycast/api";
-import { pipe } from "fp-ts/lib/function";
-import * as TE from "fp-ts/TaskEither";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default pipe(
-  music.player.shuffle.toggle,
-  TE.chain(() => music.player.shuffle.get),
-  handleTaskEitherError(`${SFSymbols.WARNING} Failed to toggle shuffle`, (status) =>
-    showToast(Toast.Style.Success, `Shuffle ${status ? "On" : "Off"}`)
-  )
-)();
+export default handleResult(scripts.player.shuffle.toggle);

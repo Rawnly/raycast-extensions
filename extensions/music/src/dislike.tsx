@@ -1,12 +1,8 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default async () => {
-  await pipe(
-    music.currentTrack.dislike,
-    handleTaskEitherError(SFSymbols.WARNING + " Could not dislike the track", SFSymbols.DISLIKE + " Disliked")
-  )();
-};
+export default handleResult(scripts.currentTrack.dislike, {
+  onSuccess: "Track Disliked",
+  onError: "Failed to dislike track",
+});

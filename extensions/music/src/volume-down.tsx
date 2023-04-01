@@ -1,17 +1,5 @@
-import { pipe } from "fp-ts/lib/function";
+import { scripts } from "@/lib/apple-music";
 
-import { SFSymbols } from "./util/models";
-import { getVolumeStep } from "./util/preferences";
-import * as music from "./util/scripts";
-import { handleTaskEitherError } from "./util/utils";
+import { handleResult } from "./lib/utils";
 
-export default async () => {
-  await pipe(
-    getVolumeStep(),
-    music.player.volume.decrease,
-    handleTaskEitherError(
-      SFSymbols.WARNING + " Failed to decrease volume",
-      SFSymbols.SPEAKER_FILL_MINUS + " Volume Down"
-    )
-  )();
-};
+export default handleResult(scripts.player.volume.decrease);
