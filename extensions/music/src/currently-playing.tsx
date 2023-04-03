@@ -48,7 +48,11 @@ function CurrentlyPlaying() {
   } = useCachedPromise(getPlayerState);
 
   const { data: track, isLoading: isTrackLoading, mutate: mutateTrack } = useCachedPromise(getTrack);
-  const { data: song, revalidate: revalidateSong } = useCachedPromise(getTrackArtwork, [track as any], {
+  const {
+    data: song,
+    revalidate: revalidateSong,
+    isLoading: isLoadingArtwork,
+  } = useCachedPromise(getTrackArtwork, [track as any], {
     execute: !!track,
   });
 
@@ -111,7 +115,7 @@ function CurrentlyPlaying() {
     <MenuBarExtra
       title={(Preferences.currentlyPlaying.displayTitle && title) || undefined}
       icon={artwork}
-      isLoading={isLoadingState || isTrackLoading}
+      isLoading={isLoadingState || isTrackLoading || isLoadingArtwork}
     >
       <MenuBarExtra.Item
         icon={isPlaying ? Icon.Pause : Icon.Play}
