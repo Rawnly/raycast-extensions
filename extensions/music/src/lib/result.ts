@@ -1,3 +1,4 @@
+import { SafeParseReturnType, ZodError } from "zod";
 import { runScript, tell } from "./apple-script";
 
 type Lazy<T> = () => T;
@@ -117,6 +118,34 @@ export const Result = {
    */
   chain: <T, E, U>(result: Result<T, E>, f: (data: T) => Promise<Result<U, E>>): Promise<Result<U, E>> =>
     Result.isSucces(result) ? f(result.data) : Promise.resolve(result),
+
+  chainSchema: <T, E, U>(
+    result: Result<T, E>,
+    f: (data: T) => SafeParseReturnType<T, U>
+  ): Result<U, E | ZodError<U>> => {
+    const isSuccess = Result.isSucces(result);
+
+    if (!isSuccess) return result;
+    const parsed = f(result.data);
+
+    if (!parsed.success) {
+      return Result.failure(parsed.error) as Result<U, ZodError<U>>;
+    }
+
+    return Result.success(parsed.data);
+  },
+
+  promisify:
+    <T, E>(promise: LazyPromise<Result<T, E>>) =>
+      async (): Promise<T> => {
+        const result = await promise();
+
+        if (Result.isSucces(result)) {
+          return Promise.resolve(result.data);
+        } else {
+          return Promise.reject(result.error);
+        }
+      },
 
   /**
    *

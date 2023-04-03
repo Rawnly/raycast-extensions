@@ -2,10 +2,15 @@ import { getPreferenceValues } from "@raycast/api";
 import { z } from "zod";
 
 const preferencesSchema = z.object({
-  volumeSteps: z.string().default("10"),
+  volumeSteps: z.number({ coerce: true }).default(10),
   sendAnonymousUsageData: z.boolean().default(true),
   closeMainWindowOnControls: z.boolean().default(true),
   enhancedFeedback: z.boolean().default(true),
+  displayArtwork: z.boolean().default(false),
+  displayTitle: z.boolean().default(true),
+  maxTitleLength: z.number({ coerce: true }).default(-1),
+  recommendations_displayAsList: z.boolean().default(false),
+  search_displayAsList: z.boolean().default(false),
 });
 
 export type IPreferences = z.infer<typeof preferencesSchema>;
@@ -17,8 +22,12 @@ export class Preferences {
     return getPreferences()[key];
   }
 
+  static getAll() {
+    return getPreferences();
+  }
+
   static get volumeStep(): number {
-    return parseInt(this.get("volumeSteps")) ?? 10;
+    return this.get("volumeSteps");
   }
 
   static get sendAnonymousUsageData(): boolean {
@@ -32,4 +41,30 @@ export class Preferences {
   static get enhancedFeedback(): boolean {
     return Preferences.get("enhancedFeedback");
   }
+
+  static currentlyPlaying = {
+    get displayArtowrk(): boolean {
+      return Preferences.get("displayArtwork");
+    },
+
+    get displayTitle(): boolean {
+      return Preferences.get("displayTitle");
+    },
+
+    get maxTitleLength(): number {
+      return Preferences.get("maxTitleLength");
+    },
+  };
+
+  static recommendations = {
+    get displayAsList(): boolean {
+      return Preferences.get("recommendations_displayAsList");
+    },
+  };
+
+  static search = {
+    get displayAsList(): boolean {
+      return Preferences.get("search_displayAsList");
+    },
+  };
 }

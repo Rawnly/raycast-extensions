@@ -27,7 +27,7 @@ const payloadSchema = z.object({
 type Payload = z.infer<typeof payloadSchema>;
 
 export const isEnabled = () => {
-  // if (environment.isDevelopment) return false;
+  if (environment.isDevelopment) return false;
   if (environment.commandName) return Preferences.sendAnonymousUsageData;
 };
 

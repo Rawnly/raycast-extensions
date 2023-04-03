@@ -1,10 +1,10 @@
 import { Toast, environment, open, closeMainWindow, Clipboard, showHUD, showToast } from "@raycast/api";
 import { match } from "ts-pattern";
 
+import { trackCommandExecution } from "./analytics";
 import { Preferences } from "./preferences";
 import Result from "./result";
 import { ScriptError } from "../models/types";
-import { trackCommandExecution } from "./analytics";
 
 export function displayError(error: Error | ScriptError) {
   const message = ScriptError.is(error) ? error.shortMessage : error.message;
@@ -51,6 +51,8 @@ interface Options<T, E> {
   closeView?: boolean;
 }
 
+export const isMenuBar = () => environment.commandMode == "menu-bar";
+
 function handleResult<T, E>(result: () => Promise<Result<T, E>>, options: Options<T, E>): () => Promise<void>;
 function handleResult<T, E>(result: () => Promise<Result<T, E>>): () => Promise<void>;
 function handleResult<T, E extends Error>(result: () => Promise<Result<T, E>>, options?: Options<T, E>) {
@@ -59,8 +61,8 @@ function handleResult<T, E extends Error>(result: () => Promise<Result<T, E>>, o
 
     await trackCommandExecution(r.success);
 
-    const closeView = options?.closeView ?? Preferences.closeMainWindowOnControls;
-    const displayEnhancedFeedback = Preferences.enhancedFeedback;
+    const closeView = isMenuBar() ? false : options?.closeView ?? Preferences.closeMainWindowOnControls;
+    const displayEnhancedFeedback = isMenuBar() ? false : Preferences.enhancedFeedback;
 
     if (!displayEnhancedFeedback) {
       if (!r.success) {
