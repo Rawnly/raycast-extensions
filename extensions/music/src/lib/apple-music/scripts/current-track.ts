@@ -1,7 +1,6 @@
 import { createQueryString, parseQueryString, runScript } from "@/lib/apple-script";
 import { STAR_VALUE } from "@/lib/costants";
 import { Result } from "@/lib/result";
-import { Track } from "@/models/music";
 
 export const reveal = () => Result.tell("reveal current track");
 export const love = (love = true) => Result.tell("set loved of current track to " + love?.toString());

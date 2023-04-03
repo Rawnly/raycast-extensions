@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Grid, LaunchType, List, getApplications, launchCommand, popToRoot } from "@raycast/api";
+import { Action, ActionPanel, Grid, LaunchType, List, launchCommand, popToRoot } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useEffect } from "react";
 

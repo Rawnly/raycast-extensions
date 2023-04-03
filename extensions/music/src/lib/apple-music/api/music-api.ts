@@ -1,5 +1,5 @@
-import { fetch, RequestInit } from "undici";
 import { nanoid } from "nanoid";
+import { fetch, RequestInit } from "undici";
 
 import { debug } from "@/lib/logger";
 import { Recommendation, SearchResponse, SearchScope, Storefront } from "@/models/music";

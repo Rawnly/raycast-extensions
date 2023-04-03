@@ -73,8 +73,8 @@ type SearchElementAttributes<T extends SearchScope> = SearchElementAttributesBas
   (T extends "songs" | "albums"
     ? Song
     : {
-      curatorName: string;
-    });
+        curatorName: string;
+      });
 
 export interface SearchElement<T extends SearchScope> {
   href: string;

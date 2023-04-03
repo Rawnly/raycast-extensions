@@ -1,4 +1,5 @@
 import { SafeParseReturnType, ZodError } from "zod";
+
 import { runScript, tell } from "./apple-script";
 
 type Lazy<T> = () => T;
@@ -137,15 +138,15 @@ export const Result = {
 
   promisify:
     <T, E>(promise: LazyPromise<Result<T, E>>) =>
-      async (): Promise<T> => {
-        const result = await promise();
+    async (): Promise<T> => {
+      const result = await promise();
 
-        if (Result.isSucces(result)) {
-          return Promise.resolve(result.data);
-        } else {
-          return Promise.reject(result.error);
-        }
-      },
+      if (Result.isSucces(result)) {
+        return Promise.resolve(result.data);
+      } else {
+        return Promise.reject(result.error);
+      }
+    },
 
   /**
    *
