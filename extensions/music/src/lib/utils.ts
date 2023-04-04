@@ -6,6 +6,22 @@ import { Preferences } from "./preferences";
 import Result from "./result";
 import { ScriptError } from "../models/types";
 
+/**
+ *
+ * Split number into N pieces, starting from 0
+ *
+ * @example divideNumber(100, 25) // => 0,25,50,75,100
+ */
+export const divideNumber = (num: number, step: number): number[] => {
+  const arr: number[] = [];
+
+  for (let i = 0; i <= num; i += step) {
+    arr.push(i);
+  }
+
+  return arr;
+};
+
 export function displayError(error: Error | ScriptError) {
   const message = ScriptError.is(error) ? error.shortMessage : error.message;
 

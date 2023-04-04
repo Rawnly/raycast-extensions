@@ -2,9 +2,25 @@ import { createQueryString, parseQueryString, runScript } from "@/lib/apple-scri
 import { STAR_VALUE } from "@/lib/costants";
 import { Result } from "@/lib/result";
 
+import { getLibraryName } from "./general";
+
 export const reveal = () => Result.tell("reveal current track");
 export const love = (love = true) => Result.tell("set loved of current track to " + love?.toString());
 export const dislike = (dislike = true) => Result.tell("set disliked of current track to " + dislike?.toString());
+export const addToLibrary = async () => {
+  const result = await Result.tell("duplicate current track to source 1");
+  if (result.success) return result;
+
+  const libraryName = await getLibraryName();
+
+  return Result.chain(libraryName, (name) => Result.tell(`duplicate current track to library playlist "${name}"`));
+};
+
+export const loveAndAddToLibrary = async () => {
+  const result = await love();
+
+  return Result.chain(result, addToLibrary);
+};
 
 /*
  * RATING

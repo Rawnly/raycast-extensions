@@ -1,3 +1,4 @@
+import { debug } from "@/lib/logger";
 import { Result } from "@/lib/result";
 import { minMax } from "@/lib/utils";
 import { PlayerState, ScriptError } from "@/models/types";

@@ -11,6 +11,7 @@ const preferencesSchema = z.object({
   maxTitleLength: z.number({ coerce: true }).default(-1),
   recommendations_displayAsList: z.boolean().default(false),
   search_displayAsList: z.boolean().default(false),
+  experimental_add_to_library: z.boolean().default(false),
 });
 
 export type IPreferences = z.infer<typeof preferencesSchema>;
@@ -26,9 +27,15 @@ export class Preferences {
     return getPreferences();
   }
 
-  static get volumeStep(): number {
-    return this.get("volumeSteps");
+  static get experimental_add_to_library() {
+    return Preferences.get("experimental_add_to_library");
   }
+
+  static volume = {
+    get step(): number {
+      return Preferences.get("volumeSteps");
+    },
+  };
 
   static get sendAnonymousUsageData(): boolean {
     return Preferences.get("sendAnonymousUsageData");

@@ -70,6 +70,45 @@
   ],
   "commands": [
     {
+      "name": "set-volume",
+      "title": "Set Volume",
+      "subtitle": "Apple Music",
+      "description": "Set Music Volume",
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "volume",
+          "placeholder": "e.g 25",
+          "required": false,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "add-to-library",
+      "title": "Add to Library",
+      "subtitle": "Apple Music",
+      "description": "Add to library currently playing track.",
+      "mode": "no-view",
+      "preferences": [
+        {
+          "type": "checkbox",
+          "name": "experimental_add_to_library",
+          "default": true,
+          "description": "Use apple-music api to add to library. This is experimental and may not work for all the tracks.",
+          "label": "Experimental Add To Library",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "love-and-add",
+      "title": "Love and Add to Library",
+      "subtitle": "Apple Music",
+      "description": "Love and add to library currently playing track.",
+      "mode": "no-view"
+    },
+    {
       "name": "currently-playing",
       "title": "Currently Playing",
       "subtitle": "Apple Music",
@@ -103,6 +142,12 @@
           "placeholder": "e.g 25"
         }
       ]
+    },
+    {
+      "name": "recently-played",
+      "title": "Recently Played",
+      "description": "Show recently played tracks",
+      "mode": "view"
     },
     {
       "name": "recommendations",

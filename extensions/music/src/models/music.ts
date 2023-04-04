@@ -1,40 +1,50 @@
-import { PlayerState } from "./types";
-
-export interface Track {
-  id?: string;
-  name: string;
-  artist: string;
-  album: string;
-  duration: string;
-  state?: PlayerState;
-}
-
-export interface Storefront {
+export interface Resource<T = unknown, U = unknown> {
   id: string;
-  type: "storefronts";
-  attributes: {
-    supportedLanguageTags: string[];
-    defaultLanguageTag: string;
-    name: string;
-    explicitContentPolicy: string;
-  };
+  type: string;
+  href?: string;
+  attributes: T;
+  relationships?: U;
 }
+
+export interface PaginatedResource<T extends Resource> {
+  href: string;
+  next: string;
+  data: T[];
+}
+
+export type HistoryItem = Resource<{
+  albumName: string;
+  genreNames: string[];
+  trackNumber: number;
+  durationInMillis: number;
+  releaseDate: string;
+  artwork: Artwork;
+  url: string;
+  name: string;
+  composerName: string;
+}>;
+
+export type Storefront = Resource<{
+  supportedLanguageTags: string[];
+  defaultLanguageTag: string;
+  name: string;
+  explicitContentPolicy: string;
+}>;
 
 type AppleMusicStringForDisplay = {
   stringForDisplay: string;
 };
 
-export interface Recommendation {
-  id: string;
-  attributes: {
+export type Recommendation = Resource<
+  {
     reason?: AppleMusicStringForDisplay;
     title: AppleMusicStringForDisplay;
     isGroupRecommendation: false;
     resourceTypes: any[];
     nextUpdateDate: string;
     kind: string;
-  };
-  relationships: {
+  },
+  {
     contents: {
       href: string;
       data: {
@@ -48,8 +58,8 @@ export interface Recommendation {
         };
       }[];
     };
-  };
-}
+  }
+>;
 
 export type SearchScope = "songs" | "albums" | "artists" | "playlists" | "stations";
 
@@ -60,35 +70,81 @@ export interface Artwork {
   bgColor: string;
 }
 
-type SearchElementAttributesBase = {
-  name: string;
-  artwork: Artwork;
+export const Artwork = {
+  getUrl: (artwork: Artwork, w: number, h = w): string =>
+    artwork.url.replace("{w}", w.toString()).replace("{h}", h.toString()),
 };
 
-type Song = {
+export type ContentRating = "clean" | "explicit";
+
+export type Album = Resource<{
   artistName: string;
-};
+  artistUrl: string;
+  artwork: Artwork;
+  audioVariants: string[];
+  contentRating: ContentRating;
+  copyright: string;
+  name: string;
+  genreNames: string[];
+  isComplete: boolean;
+  isSingle: boolean;
+  trackCount: number;
+  url: string;
+  releaseDate: string;
+}>;
 
-type SearchElementAttributes<T extends SearchScope> = SearchElementAttributesBase &
-  (T extends "songs" | "albums"
-    ? Song
-    : {
-        curatorName: string;
-      });
+export type Song = Resource<{
+  albumName: string;
+  artistName: string;
+  artistUrl: string;
+  artwork: Artwork;
+  attribution: string;
+  audioVariants: string[];
+  contentRating: ContentRating;
+  durationInMillis: number;
+  genreNames: string[];
+  name: string;
+  url: string;
+}>;
 
-export interface SearchElement<T extends SearchScope> {
-  href: string;
-  next: string;
-  data: {
-    id: string;
-    type: T;
-    href: string;
-    attributes: SearchElementAttributes<T>;
-  }[];
-}
+export type Artist = Resource<{
+  artwork: Artwork;
+  genreNames: string[];
+  name: string;
+  url: string;
+}>;
+
+export type Station = Resource<{
+  artwork: Artwork;
+  durationInMillis: number;
+  episodeNumber: number;
+  contentRating: ContentRating;
+  isLive: boolean;
+  mediaKind: "audio" | "video";
+  name: string;
+  url: string;
+  stationProviderName: string;
+}>;
+
+export type PlaylistType = "editorial" | "external" | "personal-mix" | "replay" | "user-shared";
+
+export type Playlist = Resource<{
+  artwork: Artwork;
+  curatorName: string;
+  description: string;
+  isChart: boolean;
+  name: string;
+  playlistType: PlaylistType;
+  url: string;
+  trackTypes: "music-videos" | "songs";
+}>;
 
 export type SearchResponse = {
   results: {
-    [K in SearchScope]: SearchElement<K>;
+    songs: PaginatedResource<Song>;
+    albums: PaginatedResource<Album>;
+    artists: PaginatedResource<Artist>;
+    stations: PaginatedResource<Station>;
+    playlists: PaginatedResource<Playlist>;
   };
 };

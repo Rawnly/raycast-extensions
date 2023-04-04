@@ -2,7 +2,14 @@ import { nanoid } from "nanoid";
 import { fetch, RequestInit } from "undici";
 
 import { debug } from "@/lib/logger";
-import { Recommendation, SearchResponse, SearchScope, Storefront } from "@/models/music";
+import {
+  HistoryItem,
+  PaginatedResource,
+  Recommendation,
+  SearchResponse,
+  SearchScope,
+  Storefront,
+} from "@/models/music";
 
 import { getToken, getUserToken } from "./token";
 
@@ -83,14 +90,34 @@ export default class MusicApiClient {
   };
 
   me = {
-    storefront: () => this.authenticated.request<{ data: Storefront[] }>("/me/storefront"),
+    recentlyPlayed: () =>
+      this.authenticated.request<PaginatedResource<HistoryItem>>("/me/recent/played/tracks", {
+        query: {
+          types: ["library-songs", "songs"].join(","),
+        },
+      }),
+    storefront: () => this.authenticated.request<PaginatedResource<Storefront>>("/me/storefront"),
+    recommendations: () => this.authenticated.request<PaginatedResource<Recommendation>>("/me/recommendations"),
     isLoggedIn: async () => {
       const res = await this.me.storefront();
 
       return res.status === 200;
     },
-    recommendations: () => this.authenticated.request<{ data: Recommendation[] }>("/me/recommendations"),
     library: {
+      add: async (kind: "songs" | "albums", ...ids: string[]) => {
+        const res = await this.authenticated.request("/me/library", {
+          method: "POST",
+          query: {
+            [`ids[${kind}]`]: ids.join(","),
+          },
+        });
+
+        if (res.status !== 202) {
+          throw new Error("Failed to add to library");
+        }
+
+        return res;
+      },
       songs: () => this.authenticated.request("/me/library/songs"),
       search: (term: string, types: LibrarySearchScope, limit = 25) =>
         this.authenticated.request("/me/library/search", {

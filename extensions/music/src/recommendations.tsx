@@ -1,38 +1,24 @@
-import { Action, ActionPanel, Grid, LaunchType, List, launchCommand, popToRoot } from "@raycast/api";
+import { Action, ActionPanel, Grid, List, popToRoot } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
-import { useEffect } from "react";
 
-import { api, isLoggedIn as checkAuth } from "./lib/apple-music";
+import { api } from "./lib/apple-music";
+import useAuth from "./lib/hooks/useAuth";
 import { Preferences } from "./lib/preferences";
 
 export default function Recommendations() {
-  const { data: isLoggedIn, isLoading: isLoadingAuth } = useCachedPromise(checkAuth);
+  const { isLoggedIn, isLoading: isLoadingAuth } = useAuth();
   const { data: recommendations, isLoading: isLoadingRecommendations } = useCachedPromise(api.me.recommendations, [], {
     execute: isLoggedIn,
   });
 
   const isLoading = isLoadingAuth || isLoadingRecommendations;
 
-  useEffect(() => {
-    if (isLoggedIn === undefined || isLoggedIn) return;
-
-    launchCommand({
-      type: LaunchType.UserInitiated,
-      name: "login",
-      extensionName: "music",
-      ownerOrAuthorName: "fedevitaledev",
-      context: {
-        force: true,
-      },
-    });
-  }, [isLoggedIn]);
-
   if (Preferences.recommendations.displayAsList) {
     return (
       <List isLoading={isLoading} navigationTitle="Recommendations">
         {recommendations?.data.data.map((section) => (
           <List.Section key={section.id} title={section.attributes.title.stringForDisplay}>
-            {section.relationships.contents.data.map((item) => (
+            {section.relationships?.contents.data.map((item) => (
               <List.Item
                 key={item.id}
                 title={item.attributes.name}
@@ -58,7 +44,7 @@ export default function Recommendations() {
           title={item.attributes.title.stringForDisplay}
           subtitle={item.attributes.reason?.stringForDisplay}
         >
-          {item.relationships.contents?.data.map((content) => (
+          {item.relationships?.contents?.data.map((content) => (
             <Grid.Item
               key={content.id}
               title={content.attributes.name}
